@@ -1,3 +1,5 @@
+// Time Limit Exceeded
+// Last executed input: "seeslaveidemonstrateyetartsnomedievalsees"
 class Solution {
 public:
     void moveon(vector<vector<string>>& ans, vector<int>& partition, string s, int part_num, int start) {
@@ -79,6 +81,51 @@ public:
             //cout << "i:" << i << endl;
             moveon(ans, partition, s, i, 1);
         }
+        return ans;
+    }
+};
+
+
+
+// right answer 
+#include <string>
+class Solution {
+public:
+    // use two index, low and high to compare whether the values of symmetric position are equal or not.
+    bool isPalindrome(string s, int low, int high) {
+        while (low <= high) {
+            if (s[low++] != s[high--]) return false;
+        }
+        return true;
+    }
+    
+    void moveon(vector<vector<string>>& ans, vector<string>& partition, string s, int start) {
+        // end condition: all string length in vector<string> 'partition' equals to string 's' length.
+        int part_count = 0;
+        for (int i = 0; i < partition.size(); i++) {
+            part_count += partition[i].length();
+        }
+        if (part_count == s.length()) {
+            ans.push_back(partition);
+        } else {
+            // notice that 'i' can be the same with 'start', for 'i' indicates 'high' index.
+            // when 'low' index equals to 'high' index, there is a string of length 1.
+            for (int i = start; i < s.length(); i++) {
+                // restrict that s[start, i] to be Palindrome, or do not choose this 'i' to be current node.
+                if (!isPalindrome(s, start, i)) continue;
+                partition.push_back(s.substr(start, i-start+1));
+                moveon(ans, partition, s, i+1);
+                partition.pop_back();
+            }
+        }
+    }
+    
+    
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ans;
+        vector<string> partition;
+
+        moveon(ans, partition, s, 0);
         return ans;
     }
 };

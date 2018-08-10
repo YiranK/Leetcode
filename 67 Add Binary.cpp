@@ -9,17 +9,24 @@ public:
             a.insert(0, len2-len1, '0');
         }
 
+        // cout << b << endl;
         string ans;
         int advance = -1, num;
         for (int i = len-1; i >= 0; i--){
             num = (a[i]-'0') ^ (b[i]-'0');
-            if (advance != -1) num ^= advance;
-            advance = (a[i]-'0') & (b[i]-'0') & advance;
+            if (advance != -1) {
+                num ^= advance;
+                
+                advance = (a[i]-'0') & advance | (b[i]-'0') & advance | (a[i]-'0') & (b[i]-'0');
+            } else {
+                advance = (a[i]-'0') & (b[i]-'0');
+            }
             
             char in = num+'0';
+            // pay attention to ONE char inserted into a string, needed to point out '1' length in parameters.
             ans.insert(0, 1, in);
         }
-        cout << advance;
+        // cout << advance;
         if (advance != 0) ans.insert(0, 1, advance+'0');
         
         return ans;

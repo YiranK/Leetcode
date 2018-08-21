@@ -67,3 +67,41 @@ public:
 };
 
 
+// space complexity : O(n^2)
+class Solution {
+public:
+
+    pair<int,int> expandPalindrome(string s, int i, int j) {
+        // NOTICE
+        if (s[i] != s[j]) return make_pair(i, 0);
+        while(i <= j && i-1 >= 0 && j+1 < s.length() && s[i-1] == s[j+1]) {
+            i--;
+            j++;
+        }
+        return make_pair(i, j-i+1);
+    }
+    
+    string longestPalindrome(string s) {
+        int longest = 0, st = 0;
+        for (int i = 0; i < s.length(); i++) {
+            pair<int,int> pstr1 = expandPalindrome(s, i, i);
+            pair<int,int> pstr2 = expandPalindrome(s, i, i+1);
+
+            if (max(pstr1.second, pstr2.second) > longest) {
+                if (pstr1.second >= pstr2.second) {
+                    st = pstr1.first;
+                    longest = pstr1.second;
+                } else {
+                    st = pstr2.first;
+                    longest = pstr2.second;
+                }
+                
+            }
+        }
+        
+        return s.substr(st, longest);
+    }
+};
+
+
+

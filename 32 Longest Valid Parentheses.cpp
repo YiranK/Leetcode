@@ -77,3 +77,54 @@ public:
 // 44
 // Expected:
 // 132
+
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        if (s.length() == 0) return 0;
+        int dp[s.length()] = {0};
+        for (int i = 0; i < s.length(); i++) {
+            // if (i == 5) {
+            //     bool a = s[i - dp[i-1] - 1] == '(';
+            //     bool b = s[i-1] == ')' && s[i] == ')';
+            //     bool c = i-1 >= 0 && i - dp[i-1] - 2 >= 0;
+            //     cout << a << endl;
+            //     cout << b << endl;
+            //     cout << c << endl;
+            // }
+            if (i-1 >= 0 && s[i-1] == '(' && s[i] == ')') {
+                if (i-2 >= 0) {
+                    dp[i] = dp[i-2] + 2;
+                } else {
+                    dp[i] = 2;
+                }
+            } else if (i-1 >= 0 && s[i-1] == ')' && s[i] == ')' && s[i - dp[i-1] - 1] == '(') {
+                if (i - dp[i-1] - 2 >= 0) {
+                    dp[i] = dp[i - dp[i-1] - 2] + dp[i-1] + 2;
+                } else {
+                    dp[i] = dp[i-1] + 2;
+                }
+
+            }
+        }
+        
+        int maxlen = 0;
+        for (int i = 0; i < s.length(); i++) {
+            // cout << dp[i] << " ";
+            if (dp[i] > maxlen) {
+                maxlen = dp[i];
+            }
+        }
+        
+        return maxlen;
+    }
+};
+
+// special case:
+// Input:
+// "(()())"
+// Output:
+// 4
+// Expected:
+// 6

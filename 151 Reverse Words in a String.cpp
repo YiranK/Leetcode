@@ -27,3 +27,70 @@ public:
 };
 
 
+// O(1) space, 2018/08/25
+class Solution {
+public:
+    void reverseString(string &s, int i, int j) {
+        while (i >= 0 && j < s.length() && i <= j) {
+            char tmp = s[i];
+            s[i] = s[j];
+            s[j] = tmp;
+            i++;
+            j--;
+        }
+    }
+    
+    void reverseWords(string &s) {
+        if (s == "") return;
+        reverseString(s, 0, s.length()-1);
+        
+        int i = 0;
+        while (i < s.length()) {
+            if (s[i] != ' ') {
+                break;
+            } else {
+                i++;
+            }
+        }
+        s.erase(0, i);
+        
+        // error-prone: len-1
+        i = s.length()-1;
+        while (i >= 0) {
+            if (s[i] != ' ') {
+                break;
+            } else {
+                i--;
+            }
+        }
+        // error-prone: erase
+        s.erase(i+1, s.length()-i);
+        
+        // cout << s << endl;
+        i = 0;
+
+        while (i < s.length()) {
+
+            if (i < s.length() && s[i] != ' ') {
+                int start = i;
+                while (i < s.length() && s[i] != ' ') i++;
+                reverseString(s, start, i-1);
+                // cout << "after ith reverse words: " << i << " th, " << s << endl;
+            } else {
+                int start = i;
+                while (i < s.length() && s[i] == ' ') i++;
+                if (i != start) s.replace(start, i-start, " ");
+                // cout << "after replace spaces ith reverse words: " << i << " th, " << s << endl;
+                i -= i-start-1;
+            }
+        }
+    }
+};
+
+//Input:
+// " 1"
+// Output:
+// "1 "
+// Expected:
+// "1"
+

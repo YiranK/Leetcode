@@ -47,3 +47,45 @@ public:
         replaceVal(root, bst[swap[0]], bst[swap[1]]);
     }
 };
+
+ 
+ // O(1) space
+class Solution {
+public:
+    TreeNode* first = NULL;
+    TreeNode* second = NULL;
+    TreeNode* prev = NULL;
+    
+    void traversal(TreeNode* root) {
+        if (!root) return;
+        if (root->left) traversal(root->left);
+        
+        // `prev` denotes the former and needs special initialization.
+        if (prev == NULL) {
+            prev = root;
+        } else {
+        	// the first must be the one who is bigger than its latter.
+            if (first == NULL && !(prev->val < root->val)) {
+                first = prev;
+            }
+            // the second must be the one who is smaller than its former.
+            if (first != NULL && !(prev->val < root->val)) {
+                second = root;
+            }
+        }
+        prev = root;
+        
+        if (root->right) traversal(root->right);
+    }
+    
+    
+    void recoverTree(TreeNode* root) {
+        traversal(root);
+        int tmp = first->val;
+        first->val = second->val;
+        second->val = tmp;
+        
+    }
+};
+// Pay attention !
+// 1.  !(prev->val < root->val) needs the bracket! `!` is more prior.

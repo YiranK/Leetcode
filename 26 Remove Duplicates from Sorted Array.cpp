@@ -18,3 +18,20 @@ public:
         return k+1;
     }
 };
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {      
+        if (nums.empty()) return 0;
+        // the lower pointer `i`, to denote the last not duplicated element
+        int i = 0;
+        // the faster pointer `j`, to traverse whole array
+        for (int j = 1; j < nums.size(); j++) {
+            if (nums[i] != nums[j]) {
+                i++;
+                nums[i] = nums[j];
+            }
+        }
+        return i+1;
+    }
+};

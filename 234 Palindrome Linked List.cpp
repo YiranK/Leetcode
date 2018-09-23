@@ -68,11 +68,19 @@ public:
             fast = fast->next;
             if (fast) fast = fast->next;
         }
+        // after while loop, slow indicates the head of second part
         
+        // after reverse, the sec points to original tail of linked list,
+        // the tail of second part is where origin slow pointer points to.
+        // if dual number of nodes in linked list, after reverse, the final of first part points to that of second part,
+        // if odd number of nodes in linked list, after reverse, the final of fist part is the same as that of second part.
         ListNode* sec = reverse(slow);
         ListNode* first = head;
+        // pay attention that if dual number, there's a condition the first pointer points to the tail of second part,
+        // while the second pointer points to NULL, so notice the condition: while(sec && first)
         while (sec && first && sec != first) {
             if (sec->val != first->val) return false;
+            // do not forget to move to next!
             sec = sec->next;
             first = first->next;
         }

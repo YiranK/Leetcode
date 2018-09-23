@@ -1,0 +1,10 @@
+# Write your MySQL query statement below
+SELECT (
+SELECT DISTINCT Salary
+FROM Employee
+ORDER BY Salary DESC
+LIMIT 1, 1)
+AS SecondHighestSalary
+
+# use DINSTINCT to deal with the situation where there are only two same numbers of salary, which means no second highest.
+# use SELECT() to create a temp table, then SELECT this returned temp table and rename it to second highest salary, then it will initialize to 1, why?

@@ -39,3 +39,43 @@ public:
 // error-prone:
 // 1. double(count)
 // 2. when count == odd, it can be palindrome too
+
+
+
+// O(1) Space
+class Solution {
+public:
+    ListNode* reverse(ListNode* head) {
+        ListNode* dummy = new ListNode(-1);
+        ListNode* cur = head, *tmp;
+        
+        while (cur) {
+            tmp = cur->next;
+            cur->next = dummy->next;
+            dummy->next = cur;
+            cur = tmp;
+        }
+        
+        return dummy->next;
+    }
+    
+    bool isPalindrome(ListNode* head) {
+        if (!head || head->next == NULL) return true;
+        ListNode* slow = head, *fast = head->next;
+        // slow indicates the first node in the second part, no matter if there is one node or are two nodes in the middle.
+        while (fast) {
+            slow = slow->next;
+            fast = fast->next;
+            if (fast) fast = fast->next;
+        }
+        
+        ListNode* sec = reverse(slow);
+        ListNode* first = head;
+        while (sec && first && sec != first) {
+            if (sec->val != first->val) return false;
+            sec = sec->next;
+            first = first->next;
+        }
+        return true;
+    }
+};

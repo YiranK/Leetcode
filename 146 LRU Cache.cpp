@@ -73,3 +73,60 @@ public:
  * int param_1 = obj.get(key);
  * obj.put(key,value);
  */
+
+
+
+class LRUCache {
+private:
+    // cache[key] = {value, iterator to denote front and back}
+    unordered_map<int, pair<int, list<int>::iterator>> cache;
+    // double linked list
+    list<int> dl;
+    int cap;
+public:
+    LRUCache(int capacity): cap(capacity) {}
+    
+    void update(int key, list<int>::iterator it) {
+        
+    }
+    
+    int get(int key) {
+        if (cache.find(key) != cache.end()) {
+            auto it = cache[key].second;
+            int value = cache[key].first;
+            dl.erase(it);
+            dl.push_front(key);
+            cache[key].second = dl.begin();
+            return value;
+        } else {
+            return -1;
+        }
+    }
+    
+    void put(int key, int value) {
+        if (cache.find(key) != cache.end()) {
+            auto it = cache[key].second;
+            cache[key].first = value;
+            dl.erase(it);
+            dl.push_front(key);
+            cache[key].second = dl.begin();
+        } else {
+            // cout << "dl.back(): " << dl.back() << " cache size: " << cache.size() << " dl size: " << dl.size() << endl;
+            if (cache.size() >= cap && !dl.empty()) {
+                // cout << cache.size() << " " << cap << endl;
+                cache.erase(dl.back());
+                dl.pop_back();
+            }
+            dl.push_front(key);
+            cache[key] = {value, dl.begin()};
+        }
+        // cout << "put: " << key << " " << value << " " <<cache.size() << endl;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */

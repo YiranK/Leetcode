@@ -23,3 +23,25 @@ public:
         return res;
     }
 };
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        
+        deque<int> cans;
+        vector<int> res;
+        for (int i = 0; i < nums.size(); i++) {
+            while (!cans.empty() && cans.front() < i-k+1) cans.pop_front();
+            while (!cans.empty() && nums[cans.back()] < nums[i]) cans.pop_back();
+            cans.push_back(i);
+            if (i-k+1 >= 0) res.push_back(nums[cans.front()]);
+        }
+        return res;
+    }
+};
+// double ended queue, Monotonic Queue
+// before insert the new element in the tail of deque, first pop the elements smaller than it from the tail,
+//     to ensure Monotonic in the deque
+// O(n), one insert into deque and one pop from deque, per each element
+// the time complexity of inserting or poping on deque head or deque tail is O(1)
+// deque stores the index, not the value of element in vector nums
